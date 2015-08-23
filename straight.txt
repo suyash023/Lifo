@@ -1,0 +1,208 @@
+int m1=10;/*right*/
+int m2=9;
+int m3=6;/*left*/
+int m4=5;
+int ps1=1;
+int ps2=2;
+int ps3=3;
+int ps4=4;
+int ps5=5;
+int e1=13;
+int t=700;
+int s1=180;
+int s2=70;//int t2=;
+int s3=150;
+int time1=250;
+int time2=150;
+void setup()
+{
+  pinMode(ps1,INPUT);
+  pinMode(ps2,INPUT);
+  pinMode(ps3,INPUT);
+  pinMode(ps4,INPUT);
+  pinMode(ps5,INPUT);
+  pinMode(m1,OUTPUT);
+  pinMode(m2,OUTPUT);
+  pinMode(m3,OUTPUT);
+  pinMode(m4,OUTPUT);
+  pinMode(e1,OUTPUT);
+  digitalWrite(e1,HIGH);
+  Serial.begin(9600);
+}
+void gostraight()
+{
+  analogWrite(m1,s1);
+  analogWrite(m2,0);
+  analogWrite(m3,s1);
+  analogWrite(m4,0);
+  
+}
+ void goleft()
+{
+   analogWrite(m1,s3);
+   analogWrite(m2,0);
+   analogWrite(m3,0);
+   analogWrite(m4,s3);
+   delay(time2);
+  while(analogRead(ps3)<=t)
+  {
+   analogWrite(m1,s3);
+   analogWrite(m2,0);
+   analogWrite(m3,0);
+   analogWrite(m4,s3);
+   }
+   getonline();
+}
+
+void goright()
+
+{
+   analogWrite(m1,0);
+   analogWrite(m2,s3);
+   analogWrite(m3,s3);
+   analogWrite(m4,0);
+  delay(time2);
+  while(analogRead(ps3)<=t)
+   {
+   analogWrite(m1,0);
+   analogWrite(m2,s3);
+   analogWrite(m3,s3);
+   analogWrite(m4,0);
+   }
+   getonline();
+   
+}
+/*void istop()
+{
+  analogWrite(m1,s1);
+  analogWrite(m2,s1) ;
+  analogWrite(m3,s1);
+  analogWrite(m4,s1);
+}*/
+void getonline()
+{
+    
+  while(analogRead(ps4)>t||analogRead(ps5)>t)
+  {
+    if(analogRead(ps1)<=t&&analogRead(ps2)<=t&&analogRead(ps3)>=t&&analogRead(ps4)<=t&&analogRead(ps5)<=t)
+    gostraight();
+    else
+    if(analogRead(ps1)>=t&&analogRead(ps2)>=t&&analogRead(ps3)>=t&&analogRead(ps5)<=t)
+    {
+    delay(time1);
+    if(analogRead(ps3)>=t||analogRead(ps4)>=t||analogRead(ps2)>=t)
+    getonline();
+    else
+    goright();
+    }
+    else
+    if(analogRead(ps1)<=t&&analogRead(ps3)>=t&&analogRead(ps4)>=t&&analogRead(ps5)>=t)
+    {
+    delay(time1);
+    if(analogRead(ps3)>=t||analogRead(ps4)>=t||analogRead(ps2)>=t)
+    getonline();
+    else
+    goleft();
+    }
+    else
+    if(analogRead(ps1)>=t&&analogRead(ps2)>=t&&analogRead(ps3)>=t&&analogRead(ps4)>=t&&analogRead(ps5)>=t)
+   {
+    delay(time1);
+    if(analogRead(ps3)>=t||analogRead(ps4)>=t||analogRead(ps2)>=t)
+    getonline();
+    else
+    goleft();
+   }
+   else
+   {
+    analogWrite(m1,s1);
+    analogWrite(m2,0);
+    analogWrite(m3,s2);
+    analogWrite(m4,0);  
+   }  
+  }
+   
+   
+  while(analogRead(ps1)>t||analogRead(ps2)>t)
+   {
+     if(analogRead(ps1)<=t&&analogRead(ps2)<=t&&analogRead(ps3)>=t&&analogRead(ps4)<=t&&analogRead(ps5)<=t)
+    gostraight();
+    else
+    if(analogRead(ps1)>=t&&analogRead(ps2)>=t&&analogRead(ps3)>=t&&analogRead(ps5)<=t)
+    {
+    delay(time1);
+    if(analogRead(ps3)>=t||analogRead(ps4)>=t||analogRead(ps2)>=t)
+    getonline();
+    else
+    goright();
+    }
+    else
+    if(analogRead(ps1)<=t&&analogRead(ps3)>=t&&analogRead(ps4)>=t&&analogRead(ps5)>=t)
+    {
+    delay(time1);
+    if(analogRead(ps3)>=t||analogRead(ps4)>=t||analogRead(ps2)>=t)
+    getonline();
+    else
+    goleft();
+    }
+    else
+    if(analogRead(ps1)>=t&&analogRead(ps2)>=t&&analogRead(ps3)>=t&&analogRead(ps4)>=t&&analogRead(ps5)>=t)
+    {
+    delay(time1);
+    if(analogRead(ps3)>=t||analogRead(ps4)>=t||analogRead(ps2)>=t)
+    getonline();
+    else
+    goleft();
+    }
+    else
+    {
+    analogWrite(m1,s2);
+    analogWrite(m2,0);
+    analogWrite(m3,s1);
+    analogWrite(m4,0);
+    }
+   }
+}
+void loop()
+{
+  Serial.print("s1=");
+  Serial.println(analogRead(ps1),DEC);
+  Serial.print("s2=");
+  Serial.println(analogRead(ps2),DEC);
+  Serial.print("s3=");
+  Serial.println(analogRead(ps3),DEC);
+  Serial.print("s4=");
+  Serial.println(analogRead(ps4),DEC);
+  Serial.print("s5=");
+  Serial.println(analogRead(ps5),DEC);
+  if(analogRead(ps1)<=t&&analogRead(ps2)<=t&&analogRead(ps3)>=t&&analogRead(ps4)<=t&&analogRead(ps5)<=t)
+  gostraight();
+  if((analogRead(ps1)<=t&&(analogRead(ps2)>=t||analogRead(ps4)>=t)&&analogRead(ps5)<=t)||(analogRead(ps1)>=t&&analogRead(ps2)<=t&&analogRead(ps3)<=t&&analogRead(ps4)<=t&&analogRead(ps5)<=t)||(analogRead(ps1)<=t&&analogRead(ps2)<=t&&analogRead(ps3)<=t&&analogRead(ps4)<=t&&analogRead(ps5)>=t))
+  getonline();
+  if(analogRead(ps1)>=t&&analogRead(ps2)>=t&&analogRead(ps3)>=t&&analogRead(ps5)<=t)
+  {
+    delay(time1);
+    if(analogRead(ps3)>=t)
+    gostraight();
+    else
+    goright();
+  }
+  if(analogRead(ps1)<=t&&analogRead(ps3)>=t&&analogRead(ps4)>=t&&analogRead(ps5)>=t)
+  {
+    delay(time1);
+    if(analogRead(ps3)>=t)
+    getonline();
+    else
+    goleft();
+  }
+  if(analogRead(ps1)>=t&&analogRead(ps2)>=t&&analogRead(ps3)>=t&&analogRead(ps4)>=t&&analogRead(ps5)>=t)
+  {
+    delay(time1);
+    if(analogRead(ps3)>=t)
+    getonline();
+    else
+    goleft();
+  }
+ // if(analogRead(ps1)<=t&&analogRead(ps2)<=t&&analogRead(ps3)<=t&&analogRead(ps4)<=t&&analogRead(ps5)<=t)
+ // istop();
+}
